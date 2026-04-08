@@ -1,0 +1,68 @@
+# Test des nouveaux mots-clés Kabyle (sans input)
+
+aru("--- Test amnar (range) ---")
+yal i deg amnar(5):
+    aru(i)
+
+aru("")
+aru("--- Test teghzi (len) ---")
+yefk = "Azul"
+aru("Teghzi n '")
+aru(yefk)
+aru("' =")
+aru(teghzi(yefk))
+
+aru("")
+aru("--- Test ssenf (type) ---")
+aru("Type n 42:")
+aru(ssenf(42))
+aru("Type n 'txt':")
+aru(ssenf("txt"))
+
+aru("")
+aru("--- Test uttu (int) ---")
+x = uttu("42")
+aru("uttu('42') =")
+aru(x)
+aru("type:")
+aru(ssenf(x))
+
+aru("")
+aru("--- Test awl (str) ---")
+y = awl(123)
+aru("awl(123) =")
+aru(y)
+
+aru("")
+aru("--- Test tabdart (list) ---")
+arr = tabdart([1, 2, 3])
+aru("tabdart =")
+aru(arr)
+
+aru("")
+aru("--- Test ameqqran (max) ---")
+aru("max(1, 5, 3) =")
+aru(ameqqran(1, 5, 3))
+
+aru("")
+aru("--- Test amectuh (min) ---")
+aru("min(1, 5, 3) =")
+aru(amectuh(1, 5, 3))
+
+aru("")
+aru("--- Test rnu (sum) ---")
+aru("sum([1,2,3,4]) =")
+aru(rnu([1, 2, 3, 4]))
+
+aru("")
+aru("--- Test eldi (open) ---")
+f = eldi("test.txt", "w")
+f.write("Azul deg KabyleLang")
+f.close()
+f = eldi("test.txt", "r")
+aru("Contenu de test.txt:")
+aru(f.read())
+f.close()
+
+aru("")
+aru("=== Yiwenw! (Terminé!) ===")

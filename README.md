@@ -81,6 +81,18 @@ run(code)
 | `akked`    | `and`     | Et                    |
 | `negh`     | `or`      | Ou                    |
 | `macci`    | `not`     | Non                   |
+| `seqsi`    | `input`   | Entrée utilisateur    |
+| `eldi`     | `open`    | Ouvrir fichier        |
+| `amnar`    | `range`   | Range                 |
+| `teghzi`   | `len`     | Longueur              |
+| `ssenf`    | `type`    | Type                  |
+| `uttu`     | `int`     | Entier                |
+| `awal`      | `str`     | Chaîne                |
+| `tabdart`  | `list`    | Liste                 |
+| `ameqqran` | `max`     | Maximum               |
+| `amectuh`  | `min`     | Minimum               |
+| `rnu`      | `sum`     | Somme                 |
+| `fakk`     | `quit`    | Quitter               |
 
 ---
 

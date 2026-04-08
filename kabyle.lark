@@ -124,22 +124,21 @@ comp_op: "==" -> eq
 ?power: atom ("**" factor)?
 
 // ─── ATOMES (valeurs de base) ────────────────────────────────
-// '?' permet d'inliner l'alternative `call_expr` (non aliasée) :
-// les autres alternatives ayant un alias (-> number, -> string…),
-// elles créent leur propre nœud et ne sont pas affectées.
 ?atom: NUMBER           -> number
      | STRING           -> string
+     | list_literal
      | "(" expr ")"     -> paren_expr
+     | attr_call
      | call_expr
      | IH               -> true_val
      | ALA              -> false_val
      | NAME             -> var
 
-// ─── APPEL DE FONCTION ──────────────────────────────────────
-// ARU est accepté en plus de NAME pour permettre aru(...)
-// (aru est un token spécial de priorité 2, donc il ne peut pas
-//  être matché comme NAME)
-call_expr: (NAME | ARU) "(" [arguments] ")"
+list_literal: "[" [expr ("," expr)*] "]"
+
+attr_call: NAME "." NAME ("(" [arguments] ")")?
+
+call_expr: (NAME | ARU | SEQSI | ELDI | AMNAR | TEGHZI | SSENF | UTTU | AWAL | TABDART | AMEQQRAN | AMECTUH | RNU | FAKK) "(" [arguments] ")"
 
 arguments: argument ("," argument)*
 argument: NAME "=" expr -> keyword_arg
@@ -177,6 +176,18 @@ AKKED.2: /akked(?![a-zA-Z0-9_\u00C0-\u024F])/
 NEGH.2:  /negh(?![a-zA-Z0-9_\u00C0-\u024F])/
 MACCI.2: /macci(?![a-zA-Z0-9_\u00C0-\u024F])/
 ARU.2:   /aru(?![a-zA-Z0-9_\u00C0-\u024F])/
+SEQSI.2: /seqsi(?![a-zA-Z0-9_\u00C0-\u024F])/
+ELDI.2:  /eldi(?![a-zA-Z0-9_\u00C0-\u024F])/
+AMNAR.2: /amnar(?![a-zA-Z0-9_\u00C0-\u024F])/
+TEGHZI.2:/teghzi(?![a-zA-Z0-9_\u00C0-\u024F])/
+SSENF.2: /ssenf(?![a-zA-Z0-9_\u00C0-\u024F])/
+UTTU.2:  /uttu(?![a-zA-Z0-9_\u00C0-\u024F])/
+AWAL.2:   /awal(?![a-zA-Z0-9_\u00C0-\u024F])/
+TABDART.2:/tabdart(?![a-zA-Z0-9_\u00C0-\u024F])/
+AMEQQRAN.2:/ameqqran(?![a-zA-Z0-9_\u00C0-\u024F])/
+AMECTUH.2:/amectuh(?![a-zA-Z0-9_\u00C0-\u024F])/
+RNU.2:   /rnu(?![a-zA-Z0-9_\u00C0-\u024F])/
+FAKK.2:  /fakk(?![a-zA-Z0-9_\u00C0-\u024F])/
 
 // ── Opérateurs arithmétiques (conservés) ────────────────────
 // L'ordre compte : DOUBLESLASH (//) avant SLASH (/)

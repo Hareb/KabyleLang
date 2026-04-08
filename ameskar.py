@@ -58,6 +58,19 @@ KEYWORDS_KABYLE_TO_PYTHON: dict = {
     "akked":    "and",
     "negh":     "or",
     "macci":    "not",
+    # Nouveaux mots-clés
+    "seqsi":    "input",
+    "eldi":     "open",
+    "amnar":    "range",
+    "teghzi":   "len",
+    "ssenf":    "type",
+    "uttu":     "int",
+    "awal":     "str",
+    "tabdart":  "list",
+    "ameqqran": "max",
+    "amectuh":  "min",
+    "rnu":      "sum",
+    "fakk":     "quit",
 }
 
 # Chemin vers la grammaire (même dossier que ce script)
@@ -368,13 +381,16 @@ class TreeToPython(Transformer):
         return "False"
 
     def var(self, name) -> str:
-        """
-        Référence à une variable/un nom.
-        Si c'est un mot-clé kabyle (peu probable ici puisque seuls les
-        NAME arrivent, mais par sécurité), on le traduit en Python.
-        """
         s = str(name)
         return KEYWORDS_KABYLE_TO_PYTHON.get(s, s)
+
+    def list_literal(self, *args) -> str:
+        return "[" + ", ".join(str(a) for a in args) + "]"
+
+    def attr_call(self, obj, method, *rest) -> str:
+        if rest:
+            return f"{obj}.{method}({rest[0]})"
+        return f"{obj}.{method}()"
 
     # ── Appel de fonction ─────────────────────────────────────────────────────
     # call_expr: (NAME | ARU) "(" [arguments] ")"
@@ -413,6 +429,18 @@ class TreeToPython(Transformer):
     def NEGH(self, _):  return "or"
     def MACCI(self, _): return "not"
     def ARU(self, _):   return "print"
+    def SEQSI(self, _): return "input"
+    def ELDI(self, _):  return "open"
+    def AMNAR(self, _): return "range"
+    def TEGHZ(self, _): return "len"
+    def SSENF(self, _): return "type"
+    def UTTU(self, _):  return "int"
+    def AWAL(self, _):  return "str"
+    def TABDART(self, _): return "list"
+    def AMEQQRAN(self, _): return "max"
+    def AMECTUH(self, _): return "min"
+    def RNU(self, _):   return "sum"
+    def FAKK(self, _):  return "quit"
 
 
 # ══════════════════════════════════════════════════════════════════════════════
