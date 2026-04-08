@@ -658,7 +658,7 @@ def _gerer_erreur_syntaxe(exc: Exception) -> None:
         msg_k = f"Llant tecqufin deg usideg (Problème d'indentation ou d'espacement)."
         msg_f = "Vérifiez l'indentation de votre code (espaces en début de ligne)."
     elif "COLON" in expected or ("'\":'" in expected) or (":" in str(exc)):
-        msg_k = "Yexṣṣ-ik ucciḍ (':') deffir n wawal."
+        msg_k = "Yexuṣṣ-ik ucciḍ (':') deffir n wawal."
         msg_f = "Il manque les deux-points ':' à la fin de l'instruction."
     else:
         ctx = f" ('{token_val}')" if token_val and token_val not in ("None", "") else ""
