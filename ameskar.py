@@ -81,6 +81,9 @@ KEYWORDS_KABYLE_TO_PYTHON: dict = {
     "beddel":   "replace",
     "ader":     "lower",
     "ali":      "upper",
+    "amur":     "float",
+    "azal":     "abs",
+    "qerreb":   "round",
 }
 
 # Chemin vers la grammaire (même dossier que ce script)
@@ -428,6 +431,12 @@ class TreeToPython(Transformer):
         "replace": "replace",
         "lower": "lower",
         "upper": "upper",
+        "float": "float",
+        "abs": "abs",
+        "round": "round",
+        "amur": "float",
+        "azal": "abs",
+        "qerreb": "round",
     }
 
     def attr_call(self, obj, method, *rest) -> str:
@@ -513,6 +522,9 @@ class TreeToPython(Transformer):
     def BEDDEL(self, _): return "replace"
     def ADER(self, _): return "lower"
     def ALI(self, _):  return "upper"
+    def AMUR(self, _): return "float"
+    def AZAL(self, _): return "abs"
+    def QERREB(self, _): return "round"
 
 
 # ══════════════════════════════════════════════════════════════════════════════

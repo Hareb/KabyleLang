@@ -139,7 +139,7 @@ list_literal: "[" [expr ("," expr)*] "]"
 // Appel de méthode / accès d'attribut : obj.methode(args)
 attr_call: NAME "." (NAME | ARU | GHER | MDEL | KKES | SSEGEM | TTI | BDU | SDUKKEL | BEDDEL | ADER | ALI) ("(" [arguments] ")")?
 
-call_expr: (NAME | ARU | SEQSI | ELDI | AMNAR | TEGHZI | SSENF | UTTU | AWAL | TABDART | AMEQQRAN | AMECTUH | RNU | FAKK) "(" [arguments] ")"
+call_expr: (NAME | ARU | SEQSI | ELDI | AMNAR | TEGHZI | SSENF | UTTU | AWAL | TABDART | AMEQQRAN | AMECTUH | RNU | FAKK | AMUR | AZAL | QERREB) "(" [arguments] ")"
 
 arguments: argument ("," argument)*
 argument: NAME "=" expr -> keyword_arg
@@ -199,6 +199,9 @@ SDUKKEL.2:/sdukkel(?![a-zA-Z0-9_\u00C0-\u024F])/
 BEDDEL.2:/beddel(?![a-zA-Z0-9_\u00C0-\u024F])/
 ADER.2:  /ader(?![a-zA-Z0-9_\u00C0-\u024F])/
 ALI.2:   /ali(?![a-zA-Z0-9_\u00C0-\u024F])/
+AMUR.2:  /amur(?![a-zA-Z0-9_\u00C0-\u024F])/
+AZAL.2:  /azal(?![a-zA-Z0-9_\u00C0-\u024F])/
+QERREB.2:/qerreb(?![a-zA-Z0-9_\u00C0-\u024F])/
 
 // ── Opérateurs arithmétiques (conservés) ────────────────────
 // L'ordre compte : DOUBLESLASH (//) avant SLASH (/)

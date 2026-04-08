@@ -104,6 +104,9 @@ run(code)
 | `beddel`   | `replace` | Remplacer (texte)     |
 | `ader`     | `lower`   | Minuscules            |
 | `ali`      | `upper`   | Majuscules            |
+| `amur`     | `float`   | Nombre décimal       |
+| `azal`     | `abs`     | Valeur absolue       |
+| `qerreb`   | `round`   | Arrondir             |
 
 ---
 
