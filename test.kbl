@@ -1,0 +1,89 @@
+# ============================================================
+# test.kbl — Programme de démonstration en Kabyle v1.0
+# ============================================================
+# Ce fichier teste les fonctionnalités principales :
+#   1. Assignation de variables
+#   2. Boucle "yal...deg" (for)
+#   3. Définition de fonction avec "bnu" (def)
+#   4. Condition "ma / ma_ulac" (if / else)
+#   5. Affichage avec "aru" (print)
+#   6. Retour de valeur avec "erred" (return)
+#   7. Opérateurs arithmétiques et logiques
+# ============================================================
+
+# ── 1. Message de bienvenue ──────────────────────────────────
+aru("=== Ansuf deg KabyleLang v1.0 ===")
+aru("   (Bienvenue dans KabyleLang)   ")
+
+# ── 2. Boucle : compter de 0 à 4 ────────────────────────────
+# "yal i deg range(5) :" → for i in range(5):
+aru("")
+aru("--- Limer seg 0 armi 4 (Compter de 0 à 4) ---")
+yal i deg range(5):
+    aru(i)
+
+# ── 3. Fonction : vérifier si un nombre est pair ou impair ───
+# bnu → def | erred → return | ma → if | ma_ulac → else
+# Ih → True | Ala → False | % → modulo
+bnu is_azal_aselkim(n):
+    # "azal aselkim" = nombre pair en kabyle
+    # erred Ih si n % 2 == 0, sinon erred Ala
+    ma n % 2 == 0:
+        erred Ih
+    ma_ulac:
+        erred Ala
+
+# ── 4. Fonction : afficher si pair ou impair ─────────────────
+bnu aru_aselkim_negh_amensek(n):
+    # "aselkim" = pair | "amensek" = impair
+    ma is_azal_aselkim(n):
+        aru(n)
+        aru("→ aselkim (pair)")
+    ma_ulac:
+        aru(n)
+        aru("→ amensek (impair)")
+
+# ── 5. Test de la fonction sur les nombres de 1 à 6 ──────────
+aru("")
+aru("--- Aselkim / Amensek (Pair / Impair) ---")
+yal i deg range(1, 7):
+    aru_aselkim_negh_amensek(i)
+
+# ── 6. Boucle while : compte à rebours ───────────────────────
+# skud → while
+aru("")
+aru("--- Compte à rebours (skud / while) ---")
+amur = 5
+skud amur > 0:
+    aru(amur)
+    amur -= 1
+aru("Ineba! (Terminé!)")
+
+# ── 7. Calculs arithmétiques et booléens ─────────────────────
+aru("")
+aru("--- Calculs ---")
+x = 10
+y = 3
+aru("x + y =")
+aru(x + y)
+aru("x * y =")
+aru(x * y)
+aru("x // y (division entière) =")
+aru(x // y)
+aru("x % y (modulo) =")
+aru(x % y)
+aru("x ** 2 (puissance) =")
+aru(x ** 2)
+
+# ── 8. Opérateurs logiques ────────────────────────────────────
+# akked → and | negh → or | macci → not
+aru("")
+aru("--- Opérateurs logiques ---")
+a = Ih
+b = Ala
+aru("Ih akked Ala (True and False) =")
+aru(a akked b)
+aru("Ih negh Ala (True or False) =")
+aru(a negh b)
+aru("macci Ih (not True) =")
+aru(macci a)

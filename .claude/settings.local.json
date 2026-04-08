@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python ameskar.py test.kbl --show)",
+      "Bash(python -c \"from lark.indenter import Indenter; import inspect; print\\([m for m in dir\\(Indenter\\) if not m.startswith\\('__'\\)]\\)\")",
+      "Bash(python -c \"import lark; help\\(lark.Lark.__init__\\)\")",
+      "Bash(python -c \"from lark.lark import LarkOptions; print\\(list\\(LarkOptions.OPTIONS.keys\\(\\)\\)\\)\")",
+      "Bash(python -c \"from lark.lark import LarkOptions; print\\(dir\\(LarkOptions\\)\\)\")",
+      "Bash(python -c \"from lark.lark import LarkOptions; print\\(LarkOptions._defaults\\)\")",
+      "Bash(PYTHONIOENCODING=utf-8 python ameskar.py test.kbl)",
+      "Bash(PYTHONIOENCODING=utf-8 python ameskar.py test.kbl -t)"
+    ]
+  }
+}

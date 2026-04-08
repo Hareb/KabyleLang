@@ -1,0 +1,213 @@
+// ============================================================
+// kabyle.lark — Grammaire EBNF du Langage Kabyle v1.0
+// ============================================================
+// Utilise la syntaxe Lark (EBNF étendue) avec gestion
+// de l'indentation via l'Indenter intégré de Lark.
+//
+// CONVENTIONS :
+//   - Règles en MAJUSCULES = terminaux (tokens)
+//   - Règles en minuscules  = règles de production
+//   - Terminaux avec préfixe _ (ex: _MA) = tokens écartés de
+//     l'arbre (consommés pour la structure uniquement)
+//   - Règles avec préfixe ? (ex: ?expr) = passthrough si un
+//     seul enfant (évite les nœuds inutiles dans l'arbre)
+//   - Instructions séparées par _NEWLINE
+//   - Blocs délimités par _INDENT / _DEDENT
+// ============================================================
+
+// ─── POINT D'ENTRÉE ────────────────────────────────────────
+// Un programme = suite d'instructions au niveau supérieur
+start: (_NEWLINE | statement)*
+
+// ─── INSTRUCTIONS (STATEMENTS) ─────────────────────────────
+statement: simple_stmt | compound_stmt
+
+// Instructions simples (une seule ligne)
+simple_stmt: (import_stmt
+            | return_stmt
+            | assign_stmt
+            | expr_stmt) _NEWLINE
+
+// Instructions composées (avec bloc indenté)
+compound_stmt: if_stmt
+             | while_stmt
+             | for_stmt
+             | funcdef
+
+// ─── IMPORT  (awid) ────────────────────────────────────────
+// awid math          → import math
+// awid math deg sin  → from math import sin
+import_stmt: _AWID NAME (_DEG NAME)?
+
+// ─── DÉFINITION DE FONCTION  (bnu) ─────────────────────────
+// bnu nom(param1, param2):
+//     corps
+funcdef: _BNU NAME "(" [parameters] ")" ":" block
+
+// Liste de paramètres (noms séparés par des virgules)
+parameters: NAME ("," NAME)*
+
+// ─── RETOUR DE VALEUR  (erred) ──────────────────────────────
+return_stmt: _ERRED [expr]
+
+// ─── ASSIGNATION ────────────────────────────────────────────
+// x = 10   |   x += 5   |   x -= 1
+assign_stmt: NAME assign_op expr
+
+assign_op: "="  -> assign
+         | "+=" -> iadd
+         | "-=" -> isub
+         | "*=" -> imul
+         | "/=" -> idiv
+
+// ─── INSTRUCTION EXPRESSION  (appel de fonction seul) ──────
+// Permet d'utiliser une expression seule sur une ligne,
+// typiquement un appel comme aru("bonjour").
+expr_stmt: expr
+
+// ─── CONDITION  (ma / ma_ulac) ──────────────────────────────
+// ma condition:
+//     bloc_vrai
+// ma_ulac:           ← optionnel
+//     bloc_faux
+if_stmt: _MA expr ":" block (_MA_ULAC ":" block)?
+
+// ─── BOUCLE WHILE  (skud) ───────────────────────────────────
+while_stmt: _SKUD expr ":" block
+
+// ─── BOUCLE FOR  (yal ... deg ...) ──────────────────────────
+// yal i deg range(5):
+//     corps
+for_stmt: _YAL NAME _DEG expr ":" block
+
+// ─── BLOC (groupe d'instructions indentées) ─────────────────
+// Délimité par INDENT … DEDENT injectés par KabyleIndenter.
+block: _NEWLINE _INDENT statement+ _DEDENT
+
+// ============================================================
+// EXPRESSIONS
+// ============================================================
+// Hiérarchie de priorité (faible → fort) :
+//   or > and > not > comparison > + - > * / > unaire > ** > atome
+//
+// Le préfixe '?' permet à Lark d'inliner la règle si elle n'a
+// qu'un seul enfant (évite la création de nœuds inutiles).
+
+?expr: or_expr
+
+?or_expr: and_expr (NEGH and_expr)*
+
+?and_expr: not_expr (AKKED not_expr)*
+
+// 'not_expr' n'est inliné que si c'est une simple comparison.
+// Pour "macci X", on crée un vrai nœud (2 enfants → pas de passthrough).
+?not_expr: MACCI not_expr
+         | comparison
+
+?comparison: arith_expr (comp_op arith_expr)*
+
+comp_op: "==" -> eq
+       | "!=" -> ne
+       | "<=" -> le
+       | ">=" -> ge
+       | "<"  -> lt
+       | ">"  -> gt
+
+?arith_expr: term ((PLUS | MINUS) term)*
+
+?term: factor ((STAR | SLASH | PERCENT | DOUBLESLASH) factor)*
+
+?factor: PLUS factor  -> uplus
+       | MINUS factor -> uminus
+       | power
+
+?power: atom ("**" factor)?
+
+// ─── ATOMES (valeurs de base) ────────────────────────────────
+// '?' permet d'inliner l'alternative `call_expr` (non aliasée) :
+// les autres alternatives ayant un alias (-> number, -> string…),
+// elles créent leur propre nœud et ne sont pas affectées.
+?atom: NUMBER           -> number
+     | STRING           -> string
+     | "(" expr ")"     -> paren_expr
+     | call_expr
+     | IH               -> true_val
+     | ALA              -> false_val
+     | NAME             -> var
+
+// ─── APPEL DE FONCTION ──────────────────────────────────────
+// ARU est accepté en plus de NAME pour permettre aru(...)
+// (aru est un token spécial de priorité 2, donc il ne peut pas
+//  être matché comme NAME)
+call_expr: (NAME | ARU) "(" [arguments] ")"
+
+arguments: argument ("," argument)*
+argument: NAME "=" expr -> keyword_arg
+        | expr          -> pos_arg
+
+// ============================================================
+// TERMINAUX (TOKENS)
+// ============================================================
+
+// ── Mots-clés structurels (préfixe _ = ÉCARTÉS de l'arbre) ──
+// Ces tokens servent uniquement à délimiter la syntaxe.
+// Lark les consomme mais ne les met pas dans les enfants du
+// nœud parent → les méthodes du Transformer ne les reçoivent pas.
+//
+// IMPORTANT : chaque mot-clé utilise une REGEX avec lookahead négatif
+// (?![a-zA-Z0-9_\u00C0-\u024F]) pour garantir qu'il ne matche QUE si
+// suivi d'un caractère non-identificateur. Sans cela, "aru" matcherait
+// même à l'intérieur de "aru_aselkim_negh_amensek" (car lark accorde
+// la priorité aux terminaux avec priorité > 1, même sur un match plus
+// court). La priorité 2 permet d'éviter l'ambiguïté avec NAME.
+_MA_ULAC.2: /ma_ulac(?![a-zA-Z0-9_\u00C0-\u024F])/
+_MA.2:      /ma(?![a-zA-Z0-9_\u00C0-\u024F])/
+_YAL.2:     /yal(?![a-zA-Z0-9_\u00C0-\u024F])/
+_DEG.2:     /deg(?![a-zA-Z0-9_\u00C0-\u024F])/
+_SKUD.2:    /skud(?![a-zA-Z0-9_\u00C0-\u024F])/
+_BNU.2:     /bnu(?![a-zA-Z0-9_\u00C0-\u024F])/
+_ERRED.2:   /erred(?![a-zA-Z0-9_\u00C0-\u024F])/
+_AWID.2:    /awid(?![a-zA-Z0-9_\u00C0-\u024F])/
+
+// ── Mots-clés de valeur / opérateur (CONSERVÉS dans l'arbre) ─
+// Même technique de lookahead pour éviter les faux matchs.
+IH.2:    /Ih(?![a-zA-Z0-9_\u00C0-\u024F])/
+ALA.2:   /Ala(?![a-zA-Z0-9_\u00C0-\u024F])/
+AKKED.2: /akked(?![a-zA-Z0-9_\u00C0-\u024F])/
+NEGH.2:  /negh(?![a-zA-Z0-9_\u00C0-\u024F])/
+MACCI.2: /macci(?![a-zA-Z0-9_\u00C0-\u024F])/
+ARU.2:   /aru(?![a-zA-Z0-9_\u00C0-\u024F])/
+
+// ── Opérateurs arithmétiques (conservés) ────────────────────
+// L'ordre compte : DOUBLESLASH (//) avant SLASH (/)
+DOUBLESLASH: "//"
+PLUS:        "+"
+MINUS:       "-"
+STAR:        "*"
+SLASH:       "/"
+PERCENT:     "%"
+
+// ── Littéraux ────────────────────────────────────────────────
+NUMBER: /\d+(\.\d+)?/
+STRING: /"(\\.|[^"\\])*"/ | /'(\\.|[^'\\])*'/
+
+// ── Identificateurs ──────────────────────────────────────────
+// Supporte aussi les caractères latins étendus (é, à, ç, ɛ, ɣ, etc.)
+NAME: /[a-zA-Z_\u00C0-\u024F][a-zA-Z0-9_\u00C0-\u024F]*/
+
+// ── Commentaires ─────────────────────────────────────────────
+// ASTUCE : les commentaires sont INCLUS dans la définition de
+// _NEWLINE (comme dans la grammaire Python officielle de lark).
+// Cela évite que des lignes commentaires consécutives produisent
+// plusieurs _NEWLINE que la règle `block` ne saurait pas gérer.
+COMMENT: /#[^\n]*/
+
+// ── Espaces internes (ignorés) ───────────────────────────────
+// Les espaces en début de ligne sont gérés par l'Indenter.
+%ignore /[^\S\n]+/
+
+// ── Signaux d'indentation (gérés par KabyleIndenter) ─────────
+// _NEWLINE absorbe : retours à la ligne + indentation + commentaires,
+// ce qui permet aux lignes "commentaire pur" d'être transparentes.
+_NEWLINE: (/\r?\n[\t ]*/ | COMMENT)+
+%declare _INDENT _DEDENT
