@@ -10,7 +10,11 @@
       "Bash(PYTHONIOENCODING=utf-8 python ameskar.py test.kbl)",
       "Bash(PYTHONIOENCODING=utf-8 python ameskar.py test.kbl -t)",
       "Bash(PYTHONIOENCODING=utf-8 python ameskar.py test_io.kbl -t)",
-      "Bash(PYTHONIOENCODING=utf-8 python ameskar.py test_io.kbl)"
+      "Bash(PYTHONIOENCODING=utf-8 python ameskar.py test_io.kbl)",
+      "Bash(PYTHONIOENCODING=utf-8 python ameskar.py test_math.kbl -t)",
+      "Bash(PYTHONIOENCODING=utf-8 python ameskar.py test_math.kbl)",
+      "Bash(PYTHONIOENCODING=utf-8 python ameskar.py test_full.kbl -t)",
+      "Bash(PYTHONIOENCODING=utf-8 python ameskar.py test_full.kbl)"
     ]
   }
 }

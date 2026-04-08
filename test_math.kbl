@@ -1,0 +1,12 @@
+# Test amur (float), azal (abs), qerreb (round)
+x = amur("3.14")
+aru(x)
+
+y = azal(-42)
+aru(y)
+
+z = qerreb(3.7)
+aru(z)
+
+w = qerreb(3.14159, 2)
+aru(w)

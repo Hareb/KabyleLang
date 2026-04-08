@@ -84,6 +84,12 @@ KEYWORDS_KABYLE_TO_PYTHON: dict = {
     "amur":     "float",
     "azal":     "abs",
     "qerreb":   "round",
+    "amawal":   "dict",
+    "tidet":    "bool",
+    "jerreb":   "try",
+    "slek":     "except",
+    "hbes":     "break",
+    "kemmel":   "continue",
 }
 
 # Chemin vers la grammaire (même dossier que ce script)
@@ -299,6 +305,36 @@ class TreeToPython(Transformer):
     def for_stmt(self, var, iterable, block) -> str:
         return f"for {var} in {iterable}:\n{block}"
 
+    def break_stmt(self, _=None) -> str:
+        return "break"
+
+    def continue_stmt(self, _=None) -> str:
+        return "continue"
+
+    def try_stmt(self, try_block, *rest) -> str:
+        """
+        jerreb:          →  try:
+            corps                corps
+        slek:            →  except:
+            corps_exc            corps_exc
+
+        Grammaire : try_stmt: _JERREB ":" block (SLEK ":" block)+
+        _JERREB est écarté (préfixe _), mais SLEK est conservé dans l'arbre.
+        On reçoit donc : (try_block, SLEK_str, except_block [, SLEK_str, except_block …])
+        → on itère par paires sur `rest`.
+        """
+        result = f"try:\n{try_block}"
+        # rest est une séquence alternée : [slek, block, slek, block, ...]
+        for i in range(0, len(rest), 2):
+            except_block = rest[i + 1]
+            result += f"\nexcept:\n{except_block}"
+        return result
+
+    def SLEK(self, _=None) -> str:
+        # Valeur indicative — try_stmt ne l'utilise pas réellement,
+        # mais elle doit exister car SLEK est un terminal conservé.
+        return "except"
+
     # ── Bloc indenté ──────────────────────────────────────────────────────────
 
     def block(self, *stmts) -> str:
@@ -400,6 +436,12 @@ class TreeToPython(Transformer):
     def list_literal(self, *args) -> str:
         return "[" + ", ".join(str(a) for a in args) + "]"
 
+    def subscript(self, name, index) -> str:
+        return f"{name}[{index}]"
+
+    def subscript_assign_stmt(self, name, index, value) -> str:
+        return f"{name}[{index}] = {value}"
+
     # ── Dictionnaire des méthodes d'objets kabyles → Python ─────────────────
     # Distinct de KEYWORDS_KABYLE_TO_PYTHON car ce sont des noms de méthodes
     # qui ne sont valides QUE dans un contexte `obj.methode(...)`.
@@ -437,6 +479,14 @@ class TreeToPython(Transformer):
         "amur": "float",
         "azal": "abs",
         "qerreb": "round",
+        "amawal": "dict",
+        "tidet": "bool",
+        "dict": "dict",
+        "bool": "bool",
+        "break": "break",
+        "continue": "continue",
+        "try": "try",
+        "except": "except",
     }
 
     def attr_call(self, obj, method, *rest) -> str:
@@ -525,6 +575,12 @@ class TreeToPython(Transformer):
     def AMUR(self, _): return "float"
     def AZAL(self, _): return "abs"
     def QERREB(self, _): return "round"
+    def AMAWAL(self, _): return "dict"
+    def TIDET(self, _): return "bool"
+    def JERREB(self, _): return "try"
+    def SLEK(self, _): return "except"
+    def HBES(self, _): return "break"
+    def KEMMEL(self, _): return "continue"
 
 
 # ══════════════════════════════════════════════════════════════════════════════

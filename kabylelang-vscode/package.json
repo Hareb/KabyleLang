@@ -1,0 +1,31 @@
+{
+  "name": "kabylelang",
+  "displayName": "KabyleLang",
+  "description": "Syntax highlighting for KabyleLang (.kbl)",
+  "version": "0.1.0",
+  "publisher": "lounes-hareb",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "icon": "icon.png",
+  "contributes": {
+    "languages": [
+      {
+        "id": "kabylelang",
+        "aliases": ["KabyleLang", "kabylelang"],
+        "extensions": [".kbl"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "kabylelang",
+        "scopeName": "source.kabylelang",
+        "path": "./syntaxes/kabyle.tmLanguage.json"
+      }
+    ]
+  }
+}

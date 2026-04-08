@@ -26,6 +26,9 @@ statement: simple_stmt | compound_stmt
 simple_stmt: (import_stmt
             | return_stmt
             | assign_stmt
+            | subscript_assign_stmt
+            | break_stmt
+            | continue_stmt
             | expr_stmt) _NEWLINE
 
 // Instructions composées (avec bloc indenté)
@@ -33,6 +36,7 @@ compound_stmt: if_stmt
              | while_stmt
              | for_stmt
              | funcdef
+             | try_stmt
 
 // ─── IMPORT  (awid) ────────────────────────────────────────
 // awid math          → import math
@@ -60,6 +64,10 @@ assign_op: "="  -> assign
          | "*=" -> imul
          | "/=" -> idiv
 
+// ─── ASSIGNATION PAR INDEX ───────────────────────────────────
+// d["key"] = value | l[0] = value
+subscript_assign_stmt: NAME "[" expr "]" "=" expr
+
 // ─── INSTRUCTION EXPRESSION  (appel de fonction seul) ──────
 // Permet d'utiliser une expression seule sur une ligne,
 // typiquement un appel comme aru("bonjour").
@@ -79,6 +87,13 @@ while_stmt: _SKUD expr ":" block
 // yal i deg range(5):
 //     corps
 for_stmt: _YAL NAME _DEG expr ":" block
+
+// ─── BREAK / CONTINUE ────────────────────────────────────────
+break_stmt: _HBES
+continue_stmt: _KEMMEL
+
+// ─── TRY / EXCEPT ────────────────────────────────────────────
+try_stmt: _JERREB ":" block (SLEK ":" block)+
 
 // ─── BLOC (groupe d'instructions indentées) ─────────────────
 // Délimité par INDENT … DEDENT injectés par KabyleIndenter.
@@ -129,17 +144,19 @@ comp_op: "==" -> eq
      | list_literal
      | "(" expr ")"     -> paren_expr
      | attr_call
+     | subscript
      | call_expr
      | IH               -> true_val
      | ALA              -> false_val
      | NAME             -> var
 
 list_literal: "[" [expr ("," expr)*] "]"
+subscript: NAME "[" expr "]"
 
 // Appel de méthode / accès d'attribut : obj.methode(args)
 attr_call: NAME "." (NAME | ARU | GHER | MDEL | KKES | SSEGEM | TTI | BDU | SDUKKEL | BEDDEL | ADER | ALI) ("(" [arguments] ")")?
 
-call_expr: (NAME | ARU | SEQSI | ELDI | AMNAR | TEGHZI | SSENF | UTTU | AWAL | TABDART | AMEQQRAN | AMECTUH | RNU | FAKK | AMUR | AZAL | QERREB) "(" [arguments] ")"
+call_expr: (NAME | ARU | SEQSI | ELDI | AMNAR | TEGHZI | SSENF | UTTU | AWAL | TABDART | AMEQQRAN | AMECTUH | RNU | FAKK | AMUR | AZAL | QERREB | AMAWAL) "(" [arguments] ")"
 
 arguments: argument ("," argument)*
 argument: NAME "=" expr -> keyword_arg
@@ -168,6 +185,10 @@ _SKUD.2:    /skud(?![a-zA-Z0-9_\u00C0-\u024F])/
 _BNU.2:     /bnu(?![a-zA-Z0-9_\u00C0-\u024F])/
 _ERRED.2:   /erred(?![a-zA-Z0-9_\u00C0-\u024F])/
 _AWID.2:    /awid(?![a-zA-Z0-9_\u00C0-\u024F])/
+_JERREB.2:  /jerreb(?![a-zA-Z0-9_\u00C0-\u024F])/
+_SLEK.2:    /slek(?![a-zA-Z0-9_\u00C0-\u024F])/
+_HBES.2:    /hbes(?![a-zA-Z0-9_\u00C0-\u024F])/
+_KEMMEL.2:  /kemmel(?![a-zA-Z0-9_\u00C0-\u024F])/
 
 // ── Mots-clés de valeur / opérateur (CONSERVÉS dans l'arbre) ─
 // Même technique de lookahead pour éviter les faux matchs.
@@ -202,6 +223,12 @@ ALI.2:   /ali(?![a-zA-Z0-9_\u00C0-\u024F])/
 AMUR.2:  /amur(?![a-zA-Z0-9_\u00C0-\u024F])/
 AZAL.2:  /azal(?![a-zA-Z0-9_\u00C0-\u024F])/
 QERREB.2:/qerreb(?![a-zA-Z0-9_\u00C0-\u024F])/
+JERREB.2:/jerreb(?![a-zA-Z0-9_\u00C0-\u024F])/
+SLEK.2:  /slek(?![a-zA-Z0-9_\u00C0-\u024F])/
+HBES.2:  /hbes(?![a-zA-Z0-9_\u00C0-\u024F])/
+KEMMEL.2:/kemmel(?![a-zA-Z0-9_\u00C0-\u024F])/
+AMAWAL.2:/amawal(?![a-zA-Z0-9_\u00C0-\u024F])/
+TIDET.2: /tidet(?![a-zA-Z0-9_\u00C0-\u024F])/
 
 // ── Opérateurs arithmétiques (conservés) ────────────────────
 // L'ordre compte : DOUBLESLASH (//) avant SLASH (/)

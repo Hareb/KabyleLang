@@ -1,0 +1,77 @@
+# ============================================================
+# TEST COMPLET DES MOTS-CLES KABYLELANG
+# ============================================================
+
+# ---- 1. Types de base ----
+aru("--- 1. Types ----")
+a = uttu("42")
+aru(a)
+b = amur("3.14")
+aru(b)
+c = awal(123)
+aru(c)
+d = tidet(1)
+aru(d)
+
+# ---- 2. Fonctions math ----
+aru("--- 2. Math ---")
+aru(azal(-7))
+aru(qerreb(3.7))
+aru(ameqqran(1, 5, 3))
+aru(amectuh(1, 5, 3))
+aru(rnu([1, 2, 3]))
+aru(teghzi("kabyle"))
+
+# ---- 3. Listes ----
+aru("--- 3. Listes ---")
+l = [3, 1, 4, 1, 5]
+aru(l)
+aru(teghzi(l))
+l[0] = 99
+aru(l)
+
+# ---- 4. Dictionnaire ----
+aru("--- 4. Dict ---")
+d = amawal()
+aru(d)
+
+# ---- 5. Boucle for avec amnar (range) ----
+aru("--- 5. For / amnar ---")
+yal i deg amnar(3):
+    aru(i)
+
+# ---- 6. Break / continue ----
+aru("--- 6. hbes / kemmel ---")
+yal i deg amnar(10):
+    ma i == 3:
+        kemmel
+    ma i == 6:
+        hbes
+    aru(i)
+
+# ---- 7. Try / except (jerreb / slek) ----
+aru("--- 7. jerreb / slek ---")
+jerreb:
+    x = uttu("pas_un_nombre")
+slek:
+    aru("Erreur attrapee!")
+
+# ---- 8. Methodes de chaine ----
+aru("--- 8. Methodes string ---")
+s = "Azul KABYLE"
+aru(s.ader())
+aru(s.ali())
+aru(s.beddel("KABYLE", "World"))
+
+# ---- 9. Fonction et condition ----
+aru("--- 9. Fonction ---")
+bnu sselkem(n):
+    ma n > 0:
+        erred "positif"
+    ma_ulac:
+        erred "negatif ou zero"
+
+aru(sselkem(5))
+aru(sselkem(-3))
+
+aru("=== FIN ===")

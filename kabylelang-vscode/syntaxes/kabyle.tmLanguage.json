@@ -1,0 +1,99 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "KabyleLang",
+  "scopeName": "source.kabylelang",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#strings" },
+    { "include": "#numbers" },
+    { "include": "#keywords-control" },
+    { "include": "#keywords-logical" },
+    { "include": "#constants" },
+    { "include": "#builtins" },
+    { "include": "#method-names" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.number-sign.kabylelang",
+          "match": "#.*$"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.kabylelang",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.kabylelang",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.kabylelang",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "name": "constant.character.escape.kabylelang",
+              "match": "\\\\."
+            }
+          ]
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.kabylelang",
+          "match": "\\b\\d+(\\.\\d+)?\\b"
+        }
+      ]
+    },
+    "keywords-control": {
+      "patterns": [
+        {
+          "name": "keyword.control.kabylelang",
+          "match": "\\b(ma|ma_ulac|yal|deg|skud|bnu|erred|awid|jerreb|slek|hbes|kemmel)\\b"
+        }
+      ]
+    },
+    "keywords-logical": {
+      "patterns": [
+        {
+          "name": "keyword.operator.logical.kabylelang",
+          "match": "\\b(akked|negh|macci)\\b"
+        }
+      ]
+    },
+    "constants": {
+      "patterns": [
+        {
+          "name": "constant.language.boolean.kabylelang",
+          "match": "\\b(Ih|Ala|tidet)\\b"
+        }
+      ]
+    },
+    "builtins": {
+      "patterns": [
+        {
+          "name": "support.function.builtin.kabylelang",
+          "match": "\\b(aru|seqsi|eldi|amnar|teghzi|ssenf|uttu|awal|tabdart|ameqqran|amectuh|rnu|fakk|gher|mdel|kkes|ssegem|tti|bdu|sdukkel|beddel|ader|ali|amur|azal|qerreb|amawal)\\b(?=\\s*\\()"
+        }
+      ]
+    },
+    "method-names": {
+      "patterns": [
+        {
+          "name": "entity.name.function.method.kabylelang",
+          "match": "(?<=\\.)\\b(aru|gher|mdel|kkes|ssegem|tti|bdu|sdukkel|beddel|ader|ali)\\b"
+        }
+      ]
+    }
+  }
+}

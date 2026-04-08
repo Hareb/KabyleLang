@@ -1,0 +1,42 @@
+# Test des nouvelles fonctionnalités
+
+aru("--- Test dict (amawal) ---")
+d = amawal()
+d["isem"] = "Mohamed"
+d["azal"] = 25
+aru("amawal awal:", d)
+
+aru("")
+aru("--- Test bool (tidet) ---")
+x = tidet(Ih)
+aru("tidet(Ih):", x)
+y = tidet(Ala)
+aru("tidet(Ala):", y)
+
+aru("")
+aru("--- Test break ---")
+yal i deg amnar(10):
+    ma i == 5:
+        hbes
+    aru(i)
+aru("Break i=5")
+
+aru("")
+aru("--- Test continue ---")
+yal i deg amnar(5):
+    ma i == 2:
+        kemmel
+    aru(i)
+aru("Skip i=2")
+
+aru("")
+aru("--- Test try/except ---")
+jerreb:
+    f = eldi("inexistant.txt", "r")
+    contenu = f.gher()
+    f.mdel()
+slek:
+    aru("Erreur: fichier non trouve")
+
+aru("")
+aru("=== Yiwenw! ===")
