@@ -93,6 +93,17 @@ run(code)
 | `amectuh`  | `min`     | Minimum               |
 | `rnu`      | `sum`     | Somme                 |
 | `fakk`     | `quit`    | Quitter               |
+| `gher`     | `read`    | Lire (fichier)        |
+| `mdel`     | `close`   | Fermer (fichier)      |
+| `rnu`      | `append`  | Ajouter (liste)       |
+| `kkes`     | `remove`  | Supprimer (liste)     |
+| `ssegem`   | `sort`    | Trier (liste)         |
+| `tti`      | `reverse` | Inverser (liste)      |
+| `bdu`      | `split`   | Découper (texte)      |
+| `sdukkel`  | `join`    | Joindre (texte)       |
+| `beddel`   | `replace` | Remplacer (texte)     |
+| `ader`     | `lower`   | Minuscules            |
+| `ali`      | `upper`   | Majuscules            |
 
 ---
 

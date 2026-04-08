@@ -1,0 +1,49 @@
+# Test des méthodes Kabyle
+
+aru("--- Test methods ---")
+
+# Test list methods
+aru("=== List methods ===")
+l = tabdart([3, 1, 2])
+aru("tabdart awal:", l)
+l.rnu(4)
+aru("rnu(4):", l)
+l.ssegem()
+aru("ssegem():", l)
+l.tti()
+aru("tti():", l)
+l.kkes(2)
+aru("kkes(2):", l)
+
+# Test string methods
+aru("")
+aru("=== String methods ===")
+s = awal("AZUL WA SIDI")
+aru("awal awal:", s)
+aru("ader():", s.ader())
+aru("ali():", s.ali())
+
+s2 = awal("a,b,c")
+aru("bdu(','):", s2.bdu(","))
+
+s3 = awal(["a", "b", "c"])
+aru("sdukkel('-'):", s3.sdukkel("-"))
+
+s4 = awal("hello world")
+aru("beddel('world','kabyle'):", s4.beddel("world", "kabyle"))
+
+# Test file methods
+aru("")
+aru("=== File methods ===")
+f = eldi("test2.txt", "w")
+f.aru("Azul")
+f.mdel()
+aru("Fichier cree")
+
+f = eldi("test2.txt", "r")
+contenu = f.gher()
+aru("Contenu:", contenu)
+f.mdel()
+
+aru("")
+aru("=== Yiwenw! (Termine) ===")

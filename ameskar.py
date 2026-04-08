@@ -71,6 +71,16 @@ KEYWORDS_KABYLE_TO_PYTHON: dict = {
     "amectuh":  "min",
     "rnu":      "sum",
     "fakk":     "quit",
+    "gher":     "read",
+    "mdel":     "close",
+    "kkes":     "remove",
+    "ssegem":   "sort",
+    "tti":      "reverse",
+    "bdu":      "split",
+    "sdukkel":  "join",
+    "beddel":   "replace",
+    "ader":     "lower",
+    "ali":      "upper",
 }
 
 # Chemin vers la grammaire (même dossier que ce script)
@@ -396,6 +406,28 @@ class TreeToPython(Transformer):
         "aru":  "write",   # f.aru("...")  → f.write("...")    (écrire)
         "gher": "read",    # f.gher()      → f.read()          (lire)
         "mdel": "close",   # f.mdel()      → f.close()         (fermer)
+        "rnu": "append",
+        "kkes": "remove",
+        "ssegem": "sort",
+        "tti": "reverse",
+        # Textes
+        "bdu": "split",
+        "sdukkel": "join",
+        "beddel": "replace",
+        "ader": "lower",
+        "ali": "upper",
+        # Équivalents Python (quand les tokens sont traduits avant attr_call)
+        "read": "read",
+        "close": "close",
+        "append": "append",
+        "remove": "remove",
+        "sort": "sort",
+        "reverse": "reverse",
+        "split": "split",
+        "join": "join",
+        "replace": "replace",
+        "lower": "lower",
+        "upper": "upper",
     }
 
     def attr_call(self, obj, method, *rest) -> str:
@@ -471,6 +503,16 @@ class TreeToPython(Transformer):
     def AMECTUH(self, _): return "min"
     def RNU(self, _):   return "sum"
     def FAKK(self, _):  return "quit"
+    def GHER(self, _):  return "read"
+    def MDEL(self, _):  return "close"
+    def KKES(self, _):  return "remove"
+    def SSEGEM(self, _): return "sort"
+    def TTI(self, _):   return "reverse"
+    def BDU(self, _):  return "split"
+    def SDUKKEL(self, _): return "join"
+    def BEDDEL(self, _): return "replace"
+    def ADER(self, _): return "lower"
+    def ALI(self, _):  return "upper"
 
 
 # ══════════════════════════════════════════════════════════════════════════════

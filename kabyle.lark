@@ -137,11 +137,7 @@ comp_op: "==" -> eq
 list_literal: "[" [expr ("," expr)*] "]"
 
 // Appel de méthode / accès d'attribut : obj.methode(args)
-// On accepte NAME ou ARU après le point car "aru" (mot-clé global = print)
-// est aussi utilisé comme méthode d'objet : f.aru(...) → f.write(...).
-// Les autres méthodes kabyles (gher, mdel) sont de simples NAME, donc
-// pas besoin de les lister ici — la traduction se fait dans TreeToPython.
-attr_call: NAME "." (NAME | ARU) ("(" [arguments] ")")?
+attr_call: NAME "." (NAME | ARU | GHER | MDEL | KKES | SSEGEM | TTI | BDU | SDUKKEL | BEDDEL | ADER | ALI) ("(" [arguments] ")")?
 
 call_expr: (NAME | ARU | SEQSI | ELDI | AMNAR | TEGHZI | SSENF | UTTU | AWAL | TABDART | AMEQQRAN | AMECTUH | RNU | FAKK) "(" [arguments] ")"
 
@@ -193,6 +189,16 @@ AMEQQRAN.2:/ameqqran(?![a-zA-Z0-9_\u00C0-\u024F])/
 AMECTUH.2:/amectuh(?![a-zA-Z0-9_\u00C0-\u024F])/
 RNU.2:   /rnu(?![a-zA-Z0-9_\u00C0-\u024F])/
 FAKK.2:  /fakk(?![a-zA-Z0-9_\u00C0-\u024F])/
+GHER.2:  /gher(?![a-zA-Z0-9_\u00C0-\u024F])/
+MDEL.2:  /mdel(?![a-zA-Z0-9_\u00C0-\u024F])/
+KKES.2:  /kkes(?![a-zA-Z0-9_\u00C0-\u024F])/
+SSEGEM.2:/ssegem(?![a-zA-Z0-9_\u00C0-\u024F])/
+TTI.2:   /tti(?![a-zA-Z0-9_\u00C0-\u024F])/
+BDU.2:   /bdu(?![a-zA-Z0-9_\u00C0-\u024F])/
+SDUKKEL.2:/sdukkel(?![a-zA-Z0-9_\u00C0-\u024F])/
+BEDDEL.2:/beddel(?![a-zA-Z0-9_\u00C0-\u024F])/
+ADER.2:  /ader(?![a-zA-Z0-9_\u00C0-\u024F])/
+ALI.2:   /ali(?![a-zA-Z0-9_\u00C0-\u024F])/
 
 // ── Opérateurs arithmétiques (conservés) ────────────────────
 // L'ordre compte : DOUBLESLASH (//) avant SLASH (/)
