@@ -21,6 +21,7 @@ EXTENSION FACILE — Pour ajouter un mot-clé, il suffit de :
 """
 
 import sys
+import traceback
 from pathlib import Path
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -584,7 +585,136 @@ class TreeToPython(Transformer):
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SECTION 5 — FONCTIONS PUBLIQUES
+# SECTION 5 — GESTION DES ERREURS BILINGUE (Kabyle / Français)
+# ══════════════════════════════════════════════════════════════════════════════
+
+# Codes couleurs ANSI pour un affichage console propre
+_C_RESET  = "\033[0m"
+_C_RED    = "\033[91m"
+_C_YELLOW = "\033[93m"
+_C_CYAN   = "\033[96m"
+_C_BOLD   = "\033[1m"
+_C_DIM    = "\033[2m"
+
+
+def afficher_erreur(
+    type_erreur: str,
+    ligne: int | None,
+    message_kabyle: str,
+    message_francais: str,
+) -> None:
+    """
+    Affiche une erreur bilingue (Kabyle / Français) de manière lisible
+    dans la console, avec séparateurs et couleurs ANSI.
+
+    Args:
+        type_erreur      : Titre de la catégorie d'erreur (bilingue).
+        ligne            : Numéro de ligne dans le source kabyle (ou None).
+        message_kabyle   : Description kabyle du problème.
+        message_francais : Description française du problème.
+    """
+    sep    = _C_DIM + "─" * 60 + _C_RESET
+    ligne_str = f"  {_C_CYAN}Ajerrid / Ligne{_C_RESET} : {_C_BOLD}{ligne}{_C_RESET}" if ligne else ""
+
+    print(f"\n{sep}", file=sys.stderr)
+    print(
+        f"  {_C_RED}{_C_BOLD}⚠  {type_erreur}{_C_RESET}",
+        file=sys.stderr,
+    )
+    if ligne_str:
+        print(ligne_str, file=sys.stderr)
+    print(f"  {_C_YELLOW}ⵣ  {message_kabyle}{_C_RESET}", file=sys.stderr)
+    print(f"  {_C_YELLOW}→  {message_francais}{_C_RESET}", file=sys.stderr)
+    print(sep, file=sys.stderr)
+
+
+def _gerer_erreur_syntaxe(exc: Exception) -> None:
+    """
+    Interprète une exception Lark (UnexpectedInput / UnexpectedToken /
+    UnexpectedCharacters) et affiche un message bilingue adapté.
+    """
+    from lark.exceptions import UnexpectedInput  # import local pour éviter la circularité
+
+    titre = "Tuccḍa n tseddast / Erreur de syntaxe"
+    ligne = getattr(exc, "line", None)
+
+    # Analyse du contexte de l'exception
+    expected = ""
+    if hasattr(exc, "expected"):
+        try:
+            expected = str(exc.expected)
+        except Exception:
+            expected = ""
+
+    token_val = ""
+    if hasattr(exc, "token"):
+        try:
+            token_val = str(exc.token)
+        except Exception:
+            token_val = ""
+
+    # Choisir le message le plus précis
+    if "DEDENT" in expected or "INDENT" in expected:
+        msg_k = f"Llant tecqufin deg usideg (Problème d'indentation ou d'espacement)."
+        msg_f = "Vérifiez l'indentation de votre code (espaces en début de ligne)."
+    elif "COLON" in expected or ("'\":'" in expected) or (":" in str(exc)):
+        msg_k = "Yexṣṣ-ik ucciḍ (':') deffir n wawal."
+        msg_f = "Il manque les deux-points ':' à la fin de l'instruction."
+    else:
+        ctx = f" ('{token_val}')" if token_val and token_val not in ("None", "") else ""
+        msg_k = f"Awal agi d awḥid{ctx} — ur yettwassen ara."
+        msg_f = f"Symbole ou mot inattendu{ctx}. Vérifiez votre syntaxe."
+
+    afficher_erreur(titre, ligne, msg_k, msg_f)
+
+
+def _gerer_erreur_execution(exc: Exception, python_code: str = "") -> None:
+    """
+    Interprète une exception Python levée par exec() et affiche un
+    message bilingue adapté.
+    """
+    titre = "Tuccḍa n uselkem / Erreur d'exécution"
+
+    # Extraction du numéro de ligne via traceback
+    ligne = None
+    tb = traceback.extract_tb(exc.__traceback__)
+    if tb:
+        # La dernière frame est la plus utile
+        ligne = tb[-1].lineno
+
+    exc_type = type(exc).__name__
+
+    if isinstance(exc, NameError):
+        name = getattr(exc, 'name', str(exc))
+        msg_k = f"Amutti «{name}» ur yettwassen ara."
+        msg_f = f"La variable ou fonction «{name}» n'est pas définie."
+    elif isinstance(exc, ZeroDivisionError):
+        msg_k = "Bṭu ɣef wulac — ur d-ilaq ara."
+        msg_f = "Division par zéro impossible."
+    elif isinstance(exc, TypeError):
+        msg_k = f"Ssenf n isefka mačči d win : {exc}"
+        msg_f = f"Type de donnée incompatible (ex : additionner du texte et un nombre). Détail : {exc}"
+    elif isinstance(exc, IndexError):
+        msg_k = "Umuɣ yeffeɣ i tlisa — ula d yiwen ur yella."
+        msg_f = "L'index demandé n'existe pas dans la liste."
+    elif isinstance(exc, KeyError):
+        msg_k = f"Tasarut {exc} ur tettwaf ara deg wamawal."
+        msg_f = f"La clé {exc} n'existe pas dans le dictionnaire."
+    elif isinstance(exc, FileNotFoundError):
+        msg_k = f"Afaylu ur yettwaf ara : {exc.filename}"
+        msg_f = f"Fichier introuvable : {exc.filename}"
+    elif isinstance(exc, ValueError):
+        msg_k = f"Azal mačči d win ilaqen : {exc}"
+        msg_f = f"Valeur incorrecte ou incompatible : {exc}"
+    else:
+        msg_k = f"Tuccḍa tadeffrant ({exc_type}) : {exc}"
+        msg_f = f"Erreur interne ({exc_type}) : {exc}"
+
+    afficher_erreur(titre, ligne, msg_k, msg_f)
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# SECTION 6 — FONCTIONS PUBLIQUES
 # ══════════════════════════════════════════════════════════════════════════════
 
 def transpile(code_kabyle: str) -> str:
@@ -598,18 +728,27 @@ def transpile(code_kabyle: str) -> str:
         Chaîne contenant le code Python équivalent.
 
     Raises:
-        lark.exceptions.UnexpectedInput en cas d'erreur de syntaxe.
+        SystemExit si une erreur de syntaxe est rencontrée (message bilingue
+        affiché dans la console avant de quitter).
     """
+    from lark import exceptions as lark_exc
+
     # L'Indenter a besoin d'un retour à la ligne final pour fermer
     # correctement les derniers DEDENT.
     if not code_kabyle.endswith("\n"):
         code_kabyle = code_kabyle + "\n"
 
-    parser      = get_parser()
-    tree        = parser.parse(code_kabyle)
-    transformer = TreeToPython()
-    python_code = transformer.transform(tree)
-    return str(python_code)
+    try:
+        parser      = get_parser()
+        tree        = parser.parse(code_kabyle)
+        transformer = TreeToPython()
+        python_code = transformer.transform(tree)
+        return str(python_code)
+    except (lark_exc.UnexpectedInput,
+            lark_exc.UnexpectedToken,
+            lark_exc.UnexpectedCharacters) as exc:
+        _gerer_erreur_syntaxe(exc)
+        raise SystemExit(1) from None
 
 
 def run(code_kabyle: str, verbose: bool = False) -> None:
@@ -620,7 +759,7 @@ def run(code_kabyle: str, verbose: bool = False) -> None:
         code_kabyle : Le programme kabyle à exécuter.
         verbose     : Si True, affiche le code Python généré avant exécution.
     """
-    python_code = transpile(code_kabyle)
+    python_code = transpile(code_kabyle)   # déjà protégé par try/except dans transpile()
 
     if verbose:
         sep = "─" * 60
@@ -632,11 +771,17 @@ def run(code_kabyle: str, verbose: bool = False) -> None:
 
     # Namespace isolé pour l'exécution
     namespace: dict = {"__builtins__": __builtins__}
-    exec(python_code, namespace)
+    try:
+        exec(python_code, namespace)  # noqa: S102
+    except SystemExit:
+        raise  # laisser passer les appels à fakk() / quit()
+    except Exception as exc:
+        _gerer_erreur_execution(exc, python_code)
+        raise SystemExit(1) from None
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SECTION 6 — CLI (Interface en ligne de commande)
+# SECTION 7 — CLI (Interface en ligne de commande)
 # ══════════════════════════════════════════════════════════════════════════════
 
 def main():
@@ -684,8 +829,11 @@ def main():
             print(transpile(code_kabyle))
         else:
             run(code_kabyle, verbose=args.show)
+    except SystemExit:
+        sys.exit(1)  # message bilingue déjà affiché par afficher_erreur()
     except Exception as e:
-        print(f"Erreur : {e}", file=sys.stderr)
+        # Filet de sécurité pour les erreurs vraiment inattendues
+        print(f"{_C_RED}Erreur inattendue : {e}{_C_RESET}", file=sys.stderr)
         sys.exit(1)
 
 
