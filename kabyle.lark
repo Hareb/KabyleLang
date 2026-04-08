@@ -136,7 +136,12 @@ comp_op: "==" -> eq
 
 list_literal: "[" [expr ("," expr)*] "]"
 
-attr_call: NAME "." NAME ("(" [arguments] ")")?
+// Appel de méthode / accès d'attribut : obj.methode(args)
+// On accepte NAME ou ARU après le point car "aru" (mot-clé global = print)
+// est aussi utilisé comme méthode d'objet : f.aru(...) → f.write(...).
+// Les autres méthodes kabyles (gher, mdel) sont de simples NAME, donc
+// pas besoin de les lister ici — la traduction se fait dans TreeToPython.
+attr_call: NAME "." (NAME | ARU) ("(" [arguments] ")")?
 
 call_expr: (NAME | ARU | SEQSI | ELDI | AMNAR | TEGHZI | SSENF | UTTU | AWAL | TABDART | AMEQQRAN | AMECTUH | RNU | FAKK) "(" [arguments] ")"
 

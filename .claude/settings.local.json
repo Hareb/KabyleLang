@@ -8,7 +8,9 @@
       "Bash(python -c \"from lark.lark import LarkOptions; print\\(dir\\(LarkOptions\\)\\)\")",
       "Bash(python -c \"from lark.lark import LarkOptions; print\\(LarkOptions._defaults\\)\")",
       "Bash(PYTHONIOENCODING=utf-8 python ameskar.py test.kbl)",
-      "Bash(PYTHONIOENCODING=utf-8 python ameskar.py test.kbl -t)"
+      "Bash(PYTHONIOENCODING=utf-8 python ameskar.py test.kbl -t)",
+      "Bash(PYTHONIOENCODING=utf-8 python ameskar.py test_io.kbl -t)",
+      "Bash(PYTHONIOENCODING=utf-8 python ameskar.py test_io.kbl)"
     ]
   }
 }

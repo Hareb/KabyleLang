@@ -1,0 +1,15 @@
+# Test des méthodes de fichier kabyles
+# aru = write | gher = read | mdel = close
+# eldi = open
+
+aru("--- Ecriture dans test.txt ---")
+f = eldi("test.txt", "w")
+f.aru("Azul deg KabyleLang!")
+f.mdel()
+
+aru("--- Lecture de test.txt ---")
+f = eldi("test.txt", "r")
+aru(f.gher())
+f.mdel()
+
+aru("=== Ifuk! (Termine!) ===")

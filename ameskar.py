@@ -387,10 +387,40 @@ class TreeToPython(Transformer):
     def list_literal(self, *args) -> str:
         return "[" + ", ".join(str(a) for a in args) + "]"
 
+    # ── Dictionnaire des méthodes d'objets kabyles → Python ─────────────────
+    # Distinct de KEYWORDS_KABYLE_TO_PYTHON car ce sont des noms de méthodes
+    # qui ne sont valides QUE dans un contexte `obj.methode(...)`.
+    # Pour ajouter une méthode kabyle (ex: f.rnu(x) → f.append(x)), il suffit
+    # d'ajouter une entrée ici.
+    METHODES_KABYLES = {
+        "aru":  "write",   # f.aru("...")  → f.write("...")    (écrire)
+        "gher": "read",    # f.gher()      → f.read()          (lire)
+        "mdel": "close",   # f.mdel()      → f.close()         (fermer)
+    }
+
     def attr_call(self, obj, method, *rest) -> str:
+        """
+        Appel de méthode / accès d'attribut : obj.methode(args).
+
+        Trois cas d'arrivée pour `method` :
+          1. Token NAME brut (ex: "read", "gher")  — méthode standard
+          2. Chaîne "print" — si le token ARU a été capturé après le point
+             (méthode ARU() l'a déjà traduit en "print")
+          3. Nom kabyle dans METHODES_KABYLES (ex: "gher", "mdel")
+        """
+        method_name = str(method)
+
+        # Cas spécial : si le parseur a capturé ARU après le point, la
+        # méthode ARU() du transformer l'a déjà transformé en "print".
+        # On le ramène à "write" puisque dans ce contexte, f.aru = f.write.
+        if method_name == "print":
+            method_name = "write"
+        elif method_name in self.METHODES_KABYLES:
+            method_name = self.METHODES_KABYLES[method_name]
+
         if rest:
-            return f"{obj}.{method}({rest[0]})"
-        return f"{obj}.{method}()"
+            return f"{obj}.{method_name}({rest[0]})"
+        return f"{obj}.{method_name}()"
 
     # ── Appel de fonction ─────────────────────────────────────────────────────
     # call_expr: (NAME | ARU) "(" [arguments] ")"

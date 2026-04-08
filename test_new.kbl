@@ -28,9 +28,9 @@ aru("type:")
 aru(ssenf(x))
 
 aru("")
-aru("--- Test awl (str) ---")
-y = awl(123)
-aru("awl(123) =")
+aru("--- Test awal (str) ---")
+y = awal(123)
+aru("awal(123) =")
 aru(y)
 
 aru("")
