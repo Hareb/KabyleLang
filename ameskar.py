@@ -20,6 +20,7 @@ EXTENSION FACILE — Pour ajouter un mot-clé, il suffit de :
     c) Mettre à jour KEYWORDS_KABYLE_TO_PYTHON (référence/doc).
 """
 
+import os
 import sys
 import traceback
 from pathlib import Path
@@ -93,8 +94,21 @@ KEYWORDS_KABYLE_TO_PYTHON: dict = {
     "kemmel":   "continue",
 }
 
-# Chemin vers la grammaire (même dossier que ce script)
-_GRAMMAR_PATH = Path(__file__).parent / "kabyle.lark"
+# ── Chemin vers la grammaire ─────────────────────────────────────────────────
+# Quand PyInstaller crée un .exe, il embarque kabyle.lark dans une archive
+# et le décompresse dans sys._MEIPASS au lancement.  En mode script normal,
+# on cherche simplement dans le même dossier que ameskar.py.
+
+def obtenir_chemin_grammaire() -> Path:
+    """Retourne le chemin vers kabyle.lark compatible script ET .exe PyInstaller."""
+    if hasattr(sys, "_MEIPASS"):
+        # Contexte .exe — fichiers embarqués décompressés dans _MEIPASS
+        return Path(sys._MEIPASS) / "kabyle.lark"
+    # Contexte script normal
+    return Path(os.path.abspath(os.path.dirname(__file__))) / "kabyle.lark"
+
+
+_GRAMMAR_PATH = obtenir_chemin_grammaire()
 
 
 # ══════════════════════════════════════════════════════════════════════════════
