@@ -250,12 +250,13 @@ class TreeToPython(Transformer):
     #   - 2 args: (nom_module, nom_symbol)     → from nom_module import nom_symbol
 
     def import_stmt(self, *args) -> str:
+        module = str(args[0])
+        
         if len(args) == 1:
-            return f"import {args[0]}"
-        if len(args) == 2:
-            return f"from {args[0]} import {args[1]}"
-        # Ne devrait pas arriver
-        return f"import {' '.join(str(a) for a in args)}"
+            return f"import {module}"
+            
+        elements_importes = ", ".join(str(arg) for arg in args[1:])
+        return f"from {module} import {elements_importes}"
 
     # ── Définition de fonction (bnu) ──────────────────────────────────────────
     # Avec _BNU écarté, on reçoit :

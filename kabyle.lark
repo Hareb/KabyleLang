@@ -42,7 +42,7 @@ compound_stmt: if_stmt
 // ─── IMPORT  (awid) ────────────────────────────────────────
 // awid math          → import math
 // awid math deg sin  → from math import sin
-import_stmt: _AWID NAME (_DEG NAME)?
+import_stmt: _AWID NAME (_DEG NAME ("," NAME)*)?
 
 // ─── DÉFINITION DE FONCTION  (bnu) ─────────────────────────
 // bnu nom(param1, param2):

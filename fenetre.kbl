@@ -1,0 +1,34 @@
+# ============================================================
+# asfalu.kbl — Programme avec Interface Graphique (GUI)
+# ============================================================
+
+# On importe Tkinter (la bibliothèque graphique de Python)
+awid tkinter
+awid tkinter deg Tk, Label, Button
+
+# Variable globale pour le compteur
+uttun_n_tiklliyin = 0
+
+# Fonction appelée quand on clique sur le bouton
+bnu rnu_tikelt():
+    umata uttun_n_tiklliyin
+    uttun_n_tiklliyin += 1
+    # On met à jour le texte du label
+    aḍris = "Tewteḍ " + awal(uttun_n_tiklliyin) + " n tikal!"
+    tasraft.config(text=aḍris)
+
+# 1. Création de la fenêtre principale
+asfalu = Tk()
+asfalu.title("Amezwaru Asfalu - KabyleLang")
+asfalu.geometry("300x200")
+
+# 2. Création du texte (Label)
+tasraft = Label(asfalu, text="Azul fell-awen!", font=("Arial", 14))
+tasraft.pack(pady=20)
+
+# 3. Création du bouton (Button)
+taqeffalt = Button(asfalu, text="Wwet dagi (Clique-moi)", command=rnu_tikelt, font=("Arial", 12), bg="lightblue")
+taqeffalt.pack(pady=10)
+
+# 4. Lancement de la boucle de la fenêtre
+asfalu.mainloop()
