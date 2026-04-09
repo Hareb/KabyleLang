@@ -59,7 +59,7 @@
       "patterns": [
         {
           "name": "keyword.control.kabylelang",
-          "match": "\\b(ma|ma_ulac|yal|deg|skud|bnu|erred|awid|jerreb|slek|hbes|kemmel)\\b"
+          "match": "\\b(ma|ma_ulac|yal|deg|skud|bnu|erred|awid|jerreb|slek|hbes|kemmel|umata)\\b"
         }
       ]
     },

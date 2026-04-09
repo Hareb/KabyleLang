@@ -92,6 +92,7 @@ KEYWORDS_KABYLE_TO_PYTHON: dict = {
     "slek":     "except",
     "hbes":     "break",
     "kemmel":   "continue",
+    "umata":    "global",
 }
 
 # ── Chemin vers la grammaire ─────────────────────────────────────────────────
@@ -325,6 +326,9 @@ class TreeToPython(Transformer):
 
     def continue_stmt(self, _=None) -> str:
         return "continue"
+
+    def global_stmt(self, *args) -> str:
+        return f"global {', '.join(str(arg) for arg in args)}"
 
     def try_stmt(self, try_block, *rest) -> str:
         """

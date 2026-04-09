@@ -23,7 +23,8 @@ start: (_NEWLINE | statement)*
 statement: simple_stmt | compound_stmt
 
 // Instructions simples (une seule ligne)
-simple_stmt: (import_stmt
+simple_stmt: (global_stmt
+            | import_stmt
             | return_stmt
             | assign_stmt
             | subscript_assign_stmt
@@ -72,6 +73,9 @@ subscript_assign_stmt: NAME "[" expr "]" "=" expr
 // Permet d'utiliser une expression seule sur une ligne,
 // typiquement un appel comme aru("bonjour").
 expr_stmt: expr
+
+// ─── GLOBAL (umata) ─────────────────────────────────────────
+global_stmt: _UMATA NAME ("," NAME)*
 
 // ─── CONDITION  (ma / ma_ulac) ──────────────────────────────
 // ma condition:
@@ -189,6 +193,7 @@ _JERREB.2:  /jerreb(?![a-zA-Z0-9_\u00C0-\u024F])/
 _SLEK.2:    /slek(?![a-zA-Z0-9_\u00C0-\u024F])/
 _HBES.2:    /hbes(?![a-zA-Z0-9_\u00C0-\u024F])/
 _KEMMEL.2:  /kemmel(?![a-zA-Z0-9_\u00C0-\u024F])/
+_UMATA.2:  /umata(?![a-zA-Z0-9_\u00C0-\u024F])/
 
 // ── Mots-clés de valeur / opérateur (CONSERVÉS dans l'arbre) ─
 // Même technique de lookahead pour éviter les faux matchs.
