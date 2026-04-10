@@ -595,7 +595,7 @@ class TreeToPython(Transformer):
     def SEQSI(self, _): return "input"
     def ELDI(self, _):  return "open"
     def AMNAR(self, _): return "range"
-    def TEGHZ(self, _): return "len"
+    def TEGHZI(self, _): return "len"
     def SSENF(self, _): return "type"
     def UTTU(self, _):  return "int"
     def AWAL(self, _):  return "str"
