@@ -1,0 +1,56 @@
+# ============================================================
+# uraru.kbl — Urar n uṭṭun (Le jeu de la devinette)
+# ============================================================
+# Le programme choisit un nombre secret entre 1 et 100.
+# Le joueur doit le deviner avec des indices (plus grand/petit).
+# ============================================================
+
+# Import de la fonction random de Python pour le nombre secret
+awid random
+
+aru("==========================================")
+aru("       AZUL DEG URAR N UTTUN !            ")
+aru("   (Bienvenue dans le jeu du nombre)      ")
+aru("==========================================")
+aru("")
+aru("Xtareɣ-d yiwen uṭṭun ger 1 akked 100.")
+aru("(J'ai choisi un nombre entre 1 et 100.)")
+aru("ɛreḍ ad t-id-tafeḍ ! (Essaie de le deviner !)")
+aru("")
+
+# Génération du nombre secret
+uffir = random.randint(1, 100)
+
+# Variables du jeu
+taftart = Ala      # taftart = trouvé (False au début)
+tirmitin = 0       # tirmitin = essais
+
+# Boucle principale du jeu
+skud macci taftart:
+
+    # Demander un nombre au joueur
+    tirmitin += 1
+    lǧawab = seqsi("Acu-t uṭṭun-ik ? (Ton nombre ?) : ")
+
+    jerreb:
+        # On convertit le texte tapé en entier
+        uttun_ik = uttu(lǧawab)
+
+        # Vérification des conditions
+        ma uttun_ik == uffir:
+            aru(">>> IH! Tufiḍ-t ! (OUI! Tu l'as trouvé !)")
+            taftart = Ih
+
+        ma_ulac:
+            ma uttun_ik < uffir:
+                aru("    -> Ala, uṭṭun-iw d ameqqran (Non, mon nombre est plus grand)")
+            ma_ulac:
+                aru("    -> Ala, uṭṭun-iw d amecṭuḥ (Non, mon nombre est plus petit)")
+
+    slek:
+        # Si le joueur tape du texte au lieu d'un nombre
+        aru(">>> TUCCḌA: Kteb uṭṭun s yizwilen, mačči d isekkilen! (Tape un nombre valide!)")
+
+aru("==========================================")
+aru("Trebḥeḍ s " + awal(tirmitin) + " n termitin ! (Tu as gagné en " + awal(tirmitin) + " essais !)")
+aru("IFUK ! (Terminé !)")

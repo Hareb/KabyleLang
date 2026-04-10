@@ -304,12 +304,28 @@ class TreeToPython(Transformer):
     #   - 3 args : (cond, if_block, else_block)    → if / else
 
     def if_stmt(self, *args) -> str:
-        if len(args) == 2:
-            cond, if_block = args
-            return f"if {cond}:\n{if_block}"
-        cond, if_block, else_block = args
-        return f"if {cond}:\n{if_block}\nelse:\n{else_block}"
-
+        # Le premier bloc est toujours le "if"
+        cond = args[0]
+        if_block = args[1]
+        
+        result = f"if {cond}:\n{if_block}"
+        
+        # On parcourt le reste des arguments par sauts de 2
+        i = 2
+        while i < len(args):
+            # S'il reste au moins 2 éléments, c'est un (cond_elif, bloc_elif)
+            if i + 1 < len(args):
+                cond_elif = args[i]
+                elif_block = args[i+1]
+                result += f"\nelif {cond_elif}:\n{elif_block}"
+                i += 2
+            # S'il ne reste qu'un seul élément final, c'est le else_block
+            else:
+                else_block = args[i]
+                result += f"\nelse:\n{else_block}"
+                i += 1
+                
+        return result
     # ── Boucle while (skud) ───────────────────────────────────────────────────
     # Avec _SKUD écarté : (cond, block)
 

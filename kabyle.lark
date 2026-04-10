@@ -82,7 +82,8 @@ global_stmt: _UMATA NAME ("," NAME)*
 //     bloc_vrai
 // ma_ulac:           ← optionnel
 //     bloc_faux
-if_stmt: _MA expr ":" block (_MA_ULAC ":" block)?
+
+if_stmt: _MA expr ":" block (_MA_YELLA expr ":" block)* (_MA_ULAC ":" block)?
 
 // ─── BOUCLE WHILE  (skud) ───────────────────────────────────
 while_stmt: _SKUD expr ":" block
@@ -97,7 +98,7 @@ break_stmt: _HBES
 continue_stmt: _KEMMEL
 
 // ─── TRY / EXCEPT ────────────────────────────────────────────
-try_stmt: _JERREB ":" block (SLEK ":" block)+
+try_stmt: _JERREB ":" block _SLEK ":" block
 
 // ─── BLOC (groupe d'instructions indentées) ─────────────────
 // Délimité par INDENT … DEDENT injectés par KabyleIndenter.
@@ -189,11 +190,12 @@ _SKUD.2:    /skud(?![a-zA-Z0-9_\u00C0-\u024F])/
 _BNU.2:     /bnu(?![a-zA-Z0-9_\u00C0-\u024F])/
 _ERRED.2:   /erred(?![a-zA-Z0-9_\u00C0-\u024F])/
 _AWID.2:    /awid(?![a-zA-Z0-9_\u00C0-\u024F])/
-_JERREB.2:  /jerreb(?![a-zA-Z0-9_\u00C0-\u024F])/
-_SLEK.2:    /slek(?![a-zA-Z0-9_\u00C0-\u024F])/
+_JERREB.2:  /jerreb(?![a-zA-Z0-9_\u00C0-\u024F\u1E00-\u1EFF])/
+_SLEK.2:    /slek(?![a-zA-Z0-9_\u00C0-\u024F\u1E00-\u1EFF])/
 _HBES.2:    /hbes(?![a-zA-Z0-9_\u00C0-\u024F])/
 _KEMMEL.2:  /kemmel(?![a-zA-Z0-9_\u00C0-\u024F])/
 _UMATA.2:  /umata(?![a-zA-Z0-9_\u00C0-\u024F])/
+_MA_YELLA.2: /ma_yella(?![a-zA-Z0-9_\u00C0-\u024F\u1E00-\u1EFF])/
 
 // ── Mots-clés de valeur / opérateur (CONSERVÉS dans l'arbre) ─
 // Même technique de lookahead pour éviter les faux matchs.
