@@ -14,7 +14,9 @@
       "Bash(PYTHONIOENCODING=utf-8 python ameskar.py test_math.kbl -t)",
       "Bash(PYTHONIOENCODING=utf-8 python ameskar.py test_math.kbl)",
       "Bash(PYTHONIOENCODING=utf-8 python ameskar.py test_full.kbl -t)",
-      "Bash(PYTHONIOENCODING=utf-8 python ameskar.py test_full.kbl)"
+      "Bash(PYTHONIOENCODING=utf-8 python ameskar.py test_full.kbl)",
+      "Bash(python ameskar.py dist/testIFS.kbl --transpile-only)",
+      "Bash(python -c ':*)"
     ]
   }
 }

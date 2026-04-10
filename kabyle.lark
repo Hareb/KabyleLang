@@ -146,7 +146,9 @@ comp_op: "==" -> eq
 // ─── ATOMES (valeurs de base) ────────────────────────────────
 ?atom: NUMBER           -> number
      | STRING           -> string
+     | FSTRING          -> fstring
      | list_literal
+     | dict_literal
      | "(" expr ")"     -> paren_expr
      | attr_call
      | subscript
@@ -156,6 +158,9 @@ comp_op: "==" -> eq
      | NAME             -> var
 
 list_literal: "[" [expr ("," expr)*] "]"
+dict_literal: "{" [dict_pair ("," dict_pair)*] "}"
+dict_pair: expr ":" expr
+fstring: FSTRING
 subscript: NAME "[" expr "]"
 
 // Appel de méthode / accès d'attribut : obj.methode(args)
@@ -249,10 +254,11 @@ PERCENT:     "%"
 // ── Littéraux ────────────────────────────────────────────────
 NUMBER: /\d+(\.\d+)?/
 STRING: /"(\\.|[^"\\])*"/ | /'(\\.|[^'\\])*'/
+FSTRING: /f"(\\.|[^"\\])*"/ | /f'(\\.|[^'\\])*'/
 
 // ── Identificateurs ──────────────────────────────────────────
 // Supporte aussi les caractères latins étendus (é, à, ç, ɛ, ɣ, etc.)
-NAME: /[a-zA-Z_\u00C0-\u024F][a-zA-Z0-9_\u00C0-\u024F]*/
+NAME: /[a-zA-Z_\u00C0-\u024F\u1E00-\u1EFF][a-zA-Z0-9_\u00C0-\u024F\u1E00-\u1EFF]*/
 
 // ── Commentaires ─────────────────────────────────────────────
 // ASTUCE : les commentaires sont INCLUS dans la définition de

@@ -38,6 +38,11 @@ except ImportError:
     from lark.indenter import Indenter
 
 
+class KabyleSyntaxError(Exception):
+    """Levée par transpile() en cas d'erreur de syntaxe dans le source kabyle."""
+    pass
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 # SECTION 1 — DICTIONNAIRE DES MOTS-CLÉS (référence / documentation)
 # ══════════════════════════════════════════════════════════════════════════════
@@ -354,22 +359,14 @@ class TreeToPython(Transformer):
         slek:            →  except:
             corps_exc            corps_exc
 
-        Grammaire : try_stmt: _JERREB ":" block (SLEK ":" block)+
-        _JERREB est écarté (préfixe _), mais SLEK est conservé dans l'arbre.
-        On reçoit donc : (try_block, SLEK_str, except_block [, SLEK_str, except_block …])
-        → on itère par paires sur `rest`.
+        Grammaire : try_stmt: _JERREB ":" block _SLEK ":" block
+        _JERREB et _SLEK sont écartés, on reçoit donc : (try_block, except_block)
         """
         result = f"try:\n{try_block}"
-        # rest est une séquence alternée : [slek, block, slek, block, ...]
-        for i in range(0, len(rest), 2):
-            except_block = rest[i + 1]
+        # rest contient uniquement les blocs except (sans le token _SLEK écarté)
+        for except_block in rest:
             result += f"\nexcept:\n{except_block}"
         return result
-
-    def SLEK(self, _=None) -> str:
-        # Valeur indicative — try_stmt ne l'utilise pas réellement,
-        # mais elle doit exister car SLEK est un terminal conservé.
-        return "except"
 
     # ── Bloc indenté ──────────────────────────────────────────────────────────
 
@@ -471,6 +468,15 @@ class TreeToPython(Transformer):
 
     def list_literal(self, *args) -> str:
         return "[" + ", ".join(str(a) for a in args) + "]"
+
+    def dict_literal(self, *pairs) -> str:
+        return "{" + ", ".join(str(p) for p in pairs) + "}"
+
+    def dict_pair(self, key, value) -> str:
+        return f"{key}: {value}"
+
+    def fstring(self, s) -> str:
+        return str(s)
 
     def subscript(self, name, index) -> str:
         return f"{name}[{index}]"
@@ -783,7 +789,7 @@ def transpile(code_kabyle: str) -> str:
             lark_exc.UnexpectedToken,
             lark_exc.UnexpectedCharacters) as exc:
         _gerer_erreur_syntaxe(exc)
-        raise SystemExit(1) from None
+        raise KabyleSyntaxError(str(exc)) from exc
 
 
 def run(code_kabyle: str, verbose: bool = False) -> None:
@@ -794,7 +800,10 @@ def run(code_kabyle: str, verbose: bool = False) -> None:
         code_kabyle : Le programme kabyle à exécuter.
         verbose     : Si True, affiche le code Python généré avant exécution.
     """
-    python_code = transpile(code_kabyle)   # déjà protégé par try/except dans transpile()
+    try:
+        python_code = transpile(code_kabyle)
+    except KabyleSyntaxError:
+        raise SystemExit(1) from None
 
     if verbose:
         sep = "─" * 60
@@ -829,6 +838,13 @@ def main():
         python ameskar.py -t programme.kbl        # transpile seulement
     """
     import argparse
+    import io
+
+    # Force UTF-8 sur stdout/stderr pour les identifiants kabyles (ḍ, ṭ, etc.)
+    if hasattr(sys.stdout, "buffer"):
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+    if hasattr(sys.stderr, "buffer"):
+        sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
 
     parser_cli = argparse.ArgumentParser(
         prog="ameskar",
@@ -864,8 +880,10 @@ def main():
             print(transpile(code_kabyle))
         else:
             run(code_kabyle, verbose=args.show)
-    except SystemExit:
+    except KabyleSyntaxError:
         sys.exit(1)  # message bilingue déjà affiché par afficher_erreur()
+    except SystemExit:
+        sys.exit(1)
     except Exception as e:
         # Filet de sécurité pour les erreurs vraiment inattendues
         print(f"{_C_RED}Erreur inattendue : {e}{_C_RESET}", file=sys.stderr)
