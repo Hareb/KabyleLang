@@ -30,4 +30,5 @@ Thumbs.db
 .coverage
 htmlcov/
 
-kabylelang-vscode/
+KabyleEditor/
+README 3.md

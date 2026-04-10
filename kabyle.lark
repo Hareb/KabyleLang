@@ -1,6 +1,9 @@
 // ============================================================
 // kabyle.lark — Grammaire EBNF du Langage Kabyle v1.0
 // ============================================================
+// Auteur  : Lounes Hareb
+// Projet  : KabyleLang — Premier langage de programmation en kabyle
+//
 // Utilise la syntaxe Lark (EBNF étendue) avec gestion
 // de l'indentation via l'Indenter intégré de Lark.
 //
@@ -182,65 +185,65 @@ argument: NAME "=" expr -> keyword_arg
 // nœud parent → les méthodes du Transformer ne les reçoivent pas.
 //
 // IMPORTANT : chaque mot-clé utilise une REGEX avec lookahead négatif
-// (?![a-zA-Z0-9_\u00C0-\u024F]) pour garantir qu'il ne matche QUE si
+// (?![a-zA-Z0-9_\u00C0-\u02AF]) pour garantir qu'il ne matche QUE si
 // suivi d'un caractère non-identificateur. Sans cela, "aru" matcherait
 // même à l'intérieur de "aru_aselkim_negh_amensek" (car lark accorde
 // la priorité aux terminaux avec priorité > 1, même sur un match plus
 // court). La priorité 2 permet d'éviter l'ambiguïté avec NAME.
-_MA_ULAC.2: /ma_ulac(?![a-zA-Z0-9_\u00C0-\u024F])/
-_MA.2:      /ma(?![a-zA-Z0-9_\u00C0-\u024F])/
-_YAL.2:     /yal(?![a-zA-Z0-9_\u00C0-\u024F])/
-_DEG.2:     /deg(?![a-zA-Z0-9_\u00C0-\u024F])/
-_SKUD.2:    /skud(?![a-zA-Z0-9_\u00C0-\u024F])/
-_BNU.2:     /bnu(?![a-zA-Z0-9_\u00C0-\u024F])/
-_ERRED.2:   /erred(?![a-zA-Z0-9_\u00C0-\u024F])/
-_AWID.2:    /awid(?![a-zA-Z0-9_\u00C0-\u024F])/
-_JERREB.2:  /jerreb(?![a-zA-Z0-9_\u00C0-\u024F\u1E00-\u1EFF])/
-_SLEK.2:    /slek(?![a-zA-Z0-9_\u00C0-\u024F\u1E00-\u1EFF])/
-_HBES.2:    /hbes(?![a-zA-Z0-9_\u00C0-\u024F])/
-_KEMMEL.2:  /kemmel(?![a-zA-Z0-9_\u00C0-\u024F])/
-_UMATA.2:  /umata(?![a-zA-Z0-9_\u00C0-\u024F])/
-_MA_YELLA.2: /ma_yella(?![a-zA-Z0-9_\u00C0-\u024F\u1E00-\u1EFF])/
+_MA_ULAC.2: /ma_ulac(?![a-zA-Z0-9_\u00C0-\u02AF])/
+_MA.2:      /ma(?![a-zA-Z0-9_\u00C0-\u02AF])/
+_YAL.2:     /yal(?![a-zA-Z0-9_\u00C0-\u02AF])/
+_DEG.2:     /deg(?![a-zA-Z0-9_\u00C0-\u02AF])/
+_SKUD.2:    /skud(?![a-zA-Z0-9_\u00C0-\u02AF])/
+_BNU.2:     /bnu(?![a-zA-Z0-9_\u00C0-\u02AF])/
+_ERRED.2:   /erred(?![a-zA-Z0-9_\u00C0-\u02AF])/
+_AWID.2:    /awid(?![a-zA-Z0-9_\u00C0-\u02AF])/
+_JERREB.2:  /jerreb(?![a-zA-Z0-9_\u00C0-\u02AF\u1E00-\u1EFF])/
+_SLEK.2:    /slek(?![a-zA-Z0-9_\u00C0-\u02AF\u1E00-\u1EFF])/
+_HBES.2:    /hbes(?![a-zA-Z0-9_\u00C0-\u02AF])/
+_KEMMEL.2:  /kemmel(?![a-zA-Z0-9_\u00C0-\u02AF])/
+_UMATA.2:  /umata(?![a-zA-Z0-9_\u00C0-\u02AF])/
+_MA_YELLA.2: /ma_yella(?![a-zA-Z0-9_\u00C0-\u02AF\u1E00-\u1EFF])/
 
 // ── Mots-clés de valeur / opérateur (CONSERVÉS dans l'arbre) ─
 // Même technique de lookahead pour éviter les faux matchs.
-IH.2:    /Ih(?![a-zA-Z0-9_\u00C0-\u024F])/
-ALA.2:   /Ala(?![a-zA-Z0-9_\u00C0-\u024F])/
-AKKED.2: /akked(?![a-zA-Z0-9_\u00C0-\u024F])/
-NEGH.2:  /negh(?![a-zA-Z0-9_\u00C0-\u024F])/
-MACCI.2: /macci(?![a-zA-Z0-9_\u00C0-\u024F])/
-ARU.2:   /aru(?![a-zA-Z0-9_\u00C0-\u024F])/
-SEQSI.2: /seqsi(?![a-zA-Z0-9_\u00C0-\u024F])/
-ELDI.2:  /eldi(?![a-zA-Z0-9_\u00C0-\u024F])/
-AMNAR.2: /amnar(?![a-zA-Z0-9_\u00C0-\u024F])/
-TEGHZI.2:/teghzi(?![a-zA-Z0-9_\u00C0-\u024F])/
-SSENF.2: /ssenf(?![a-zA-Z0-9_\u00C0-\u024F])/
-UTTU.2:  /uttu(?![a-zA-Z0-9_\u00C0-\u024F])/
-AWAL.2:   /awal(?![a-zA-Z0-9_\u00C0-\u024F])/
-TABDART.2:/tabdart(?![a-zA-Z0-9_\u00C0-\u024F])/
-AMEQQRAN.2:/ameqqran(?![a-zA-Z0-9_\u00C0-\u024F])/
-AMECTUH.2:/amectuh(?![a-zA-Z0-9_\u00C0-\u024F])/
-RNU.2:   /rnu(?![a-zA-Z0-9_\u00C0-\u024F])/
-FAKK.2:  /fakk(?![a-zA-Z0-9_\u00C0-\u024F])/
-GHER.2:  /gher(?![a-zA-Z0-9_\u00C0-\u024F])/
-MDEL.2:  /mdel(?![a-zA-Z0-9_\u00C0-\u024F])/
-KKES.2:  /kkes(?![a-zA-Z0-9_\u00C0-\u024F])/
-SSEGEM.2:/ssegem(?![a-zA-Z0-9_\u00C0-\u024F])/
-TTI.2:   /tti(?![a-zA-Z0-9_\u00C0-\u024F])/
-BDU.2:   /bdu(?![a-zA-Z0-9_\u00C0-\u024F])/
-SDUKKEL.2:/sdukkel(?![a-zA-Z0-9_\u00C0-\u024F])/
-BEDDEL.2:/beddel(?![a-zA-Z0-9_\u00C0-\u024F])/
-ADER.2:  /ader(?![a-zA-Z0-9_\u00C0-\u024F])/
-ALI.2:   /ali(?![a-zA-Z0-9_\u00C0-\u024F])/
-AMUR.2:  /amur(?![a-zA-Z0-9_\u00C0-\u024F])/
-AZAL.2:  /azal(?![a-zA-Z0-9_\u00C0-\u024F])/
-QERREB.2:/qerreb(?![a-zA-Z0-9_\u00C0-\u024F])/
-JERREB.2:/jerreb(?![a-zA-Z0-9_\u00C0-\u024F])/
-SLEK.2:  /slek(?![a-zA-Z0-9_\u00C0-\u024F])/
-HBES.2:  /hbes(?![a-zA-Z0-9_\u00C0-\u024F])/
-KEMMEL.2:/kemmel(?![a-zA-Z0-9_\u00C0-\u024F])/
-AMAWAL.2:/amawal(?![a-zA-Z0-9_\u00C0-\u024F])/
-TIDET.2: /tidet(?![a-zA-Z0-9_\u00C0-\u024F])/
+IH.2: /[Ii]h(?![a-zA-Z0-9_\u00C0-\u02AF])/
+ALA.2: /[Aa]la(?![a-zA-Z0-9_\u00C0-\u02AF])/
+AKKED.2: /akked(?![a-zA-Z0-9_\u00C0-\u02AF])/
+NEGH.2:  /negh(?![a-zA-Z0-9_\u00C0-\u02AF])/
+MACCI.2: /macci(?![a-zA-Z0-9_\u00C0-\u02AF])/
+ARU.2:   /aru(?![a-zA-Z0-9_\u00C0-\u02AF])/
+SEQSI.2: /seqsi(?![a-zA-Z0-9_\u00C0-\u02AF])/
+ELDI.2:  /eldi(?![a-zA-Z0-9_\u00C0-\u02AF])/
+AMNAR.2: /amnar(?![a-zA-Z0-9_\u00C0-\u02AF])/
+TEGHZI.2:/teghzi(?![a-zA-Z0-9_\u00C0-\u02AF])/
+SSENF.2: /ssenf(?![a-zA-Z0-9_\u00C0-\u02AF])/
+UTTU.2:  /uttu(?![a-zA-Z0-9_\u00C0-\u02AF])/
+AWAL.2:   /awal(?![a-zA-Z0-9_\u00C0-\u02AF])/
+TABDART.2:/tabdart(?![a-zA-Z0-9_\u00C0-\u02AF])/
+AMEQQRAN.2:/ameqqran(?![a-zA-Z0-9_\u00C0-\u02AF])/
+AMECTUH.2:/amectuh(?![a-zA-Z0-9_\u00C0-\u02AF])/
+RNU.2:   /rnu(?![a-zA-Z0-9_\u00C0-\u02AF])/
+FAKK.2:  /fakk(?![a-zA-Z0-9_\u00C0-\u02AF])/
+GHER.2:  /gher(?![a-zA-Z0-9_\u00C0-\u02AF])/
+MDEL.2:  /mdel(?![a-zA-Z0-9_\u00C0-\u02AF])/
+KKES.2:  /kkes(?![a-zA-Z0-9_\u00C0-\u02AF])/
+SSEGEM.2:/ssegem(?![a-zA-Z0-9_\u00C0-\u02AF])/
+TTI.2:   /tti(?![a-zA-Z0-9_\u00C0-\u02AF])/
+BDU.2:   /bdu(?![a-zA-Z0-9_\u00C0-\u02AF])/
+SDUKKEL.2:/sdukkel(?![a-zA-Z0-9_\u00C0-\u02AF])/
+BEDDEL.2:/beddel(?![a-zA-Z0-9_\u00C0-\u02AF])/
+ADER.2:  /ader(?![a-zA-Z0-9_\u00C0-\u02AF])/
+ALI.2:   /ali(?![a-zA-Z0-9_\u00C0-\u02AF])/
+AMUR.2:  /amur(?![a-zA-Z0-9_\u00C0-\u02AF])/
+AZAL.2:  /azal(?![a-zA-Z0-9_\u00C0-\u02AF])/
+QERREB.2:/qerreb(?![a-zA-Z0-9_\u00C0-\u02AF])/
+JERREB.2:/jerreb(?![a-zA-Z0-9_\u00C0-\u02AF])/
+SLEK.2:  /slek(?![a-zA-Z0-9_\u00C0-\u02AF])/
+HBES.2:  /hbes(?![a-zA-Z0-9_\u00C0-\u02AF])/
+KEMMEL.2:/kemmel(?![a-zA-Z0-9_\u00C0-\u02AF])/
+AMAWAL.2:/amawal(?![a-zA-Z0-9_\u00C0-\u02AF])/
+TIDET.2: /tidet(?![a-zA-Z0-9_\u00C0-\u02AF])/
 
 // ── Opérateurs arithmétiques (conservés) ────────────────────
 // L'ordre compte : DOUBLESLASH (//) avant SLASH (/)
@@ -254,11 +257,11 @@ PERCENT:     "%"
 // ── Littéraux ────────────────────────────────────────────────
 NUMBER: /\d+(\.\d+)?/
 STRING: /"(\\.|[^"\\])*"/ | /'(\\.|[^'\\])*'/
-FSTRING: /f"(\\.|[^"\\])*"/ | /f'(\\.|[^'\\])*'/
+FSTRING.3: /f"(\\.|[^"\\])*"/ | /f'(\\.|[^'\\])*'/
 
 // ── Identificateurs ──────────────────────────────────────────
 // Supporte aussi les caractères latins étendus (é, à, ç, ɛ, ɣ, etc.)
-NAME: /[a-zA-Z_\u00C0-\u024F\u1E00-\u1EFF][a-zA-Z0-9_\u00C0-\u024F\u1E00-\u1EFF]*/
+NAME: /[a-zA-Z_\u00C0-\u02AF\u1E00-\u1EFF\u03B5\u0395][a-zA-Z0-9_\u00C0-\u02AF\u1E00-\u1EFF\u03B5\u0395]*/
 
 // ── Commentaires ─────────────────────────────────────────────
 // ASTUCE : les commentaires sont INCLUS dans la définition de

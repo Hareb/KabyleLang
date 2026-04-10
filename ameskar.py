@@ -1,6 +1,9 @@
 """
 ameskar.py — Transpilateur Kabyle → Python v1.0
 ================================================
+Auteur  : Lounes Hareb
+Projet  : KabyleLang — Premier langage de programmation en kabyle
+
 "Ameskar" signifie "programmeur" / "celui qui code" en kabyle.
 
 ARCHITECTURE :
